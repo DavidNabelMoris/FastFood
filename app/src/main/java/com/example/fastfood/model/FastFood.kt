@@ -1,13 +1,10 @@
 package com.example.fastfood.model
 
-data class Horaire(
-    val ouverture: String,
-    val fermeture: String
-)
+
 data class HoraireJour(
     val jour: String,
-    val horaireMatin: Horaire,
-    val horaireSoir: Horaire
+    val horaireMatin: String,
+    val horaireSoir: String
 )
 data class FastFood (
     val id: Int,
