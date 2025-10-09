@@ -2,8 +2,7 @@ package com.example.fastfood.utility.file
 
 
 import android.content.Context
-import com.example.fastfood.
-import td.info507.myppoker.storage.utility.Storage
+import com.example.fastfood.utility.Storage
 import java.io.BufferedReader
 import java.io.FileNotFoundException
 import java.io.InputStreamReader
