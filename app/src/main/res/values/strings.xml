@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FastFood</string>
+    <string name="success">Succès</string>
+    <string name="error">Echec</string>
 </resources>

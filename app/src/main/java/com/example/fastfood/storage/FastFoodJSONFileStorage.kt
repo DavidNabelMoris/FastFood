@@ -5,7 +5,6 @@ import androidx.compose.ui.graphics.Color
 import com.example.fastfood.model.FastFood
 import com.example.fastfood.utility.file.JSONFileStorage
 import org.json.JSONObject
-import com.example.fastfood.model.Horaire
 import com.example.fastfood.model.HoraireJour
 import org.json.JSONArray
 
@@ -41,12 +40,10 @@ class FastFoodJSONFileStorage(context: Context) : JSONFileStorage<FastFood>(cont
             jourJson.put("jour", horaireJour.jour)
 
             val matinJson = JSONObject()
-            matinJson.put("ouverture", horaireJour.horaireMatin.ouverture)
-            matinJson.put("fermeture", horaireJour.horaireMatin.fermeture)
+            matinJson.put("horaireMatin",horaireJour.horaireMatin)
 
             val soirJson = JSONObject()
-            soirJson.put("ouverture", horaireJour.horaireSoir.ouverture)
-            soirJson.put("fermeture", horaireJour.horaireSoir.fermeture)
+            soirJson.put("horaireSoir", horaireJour.horaireSoir)
 
             jourJson.put("horaireMatin", matinJson)
             jourJson.put("horaireSoir", soirJson)
@@ -68,8 +65,8 @@ class FastFoodJSONFileStorage(context: Context) : JSONFileStorage<FastFood>(cont
 
             val horaireJour = HoraireJour(
                 jourJson.getString("jour"),
-                Horaire(horaireMatinJson.getString("ouverture"), horaireMatinJson.getString("fermeture")),
-                Horaire(horaireSoirJson.getString("ouverture"), horaireSoirJson.getString("fermeture"))
+                horaireMatinJson.toString(),
+                horaireSoirJson.toString()
             )
             horaires.add(horaireJour)
         }

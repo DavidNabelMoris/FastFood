@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.fastfood.composable.RestoListScreen
 import com.example.fastfood.ui.theme.FastFoodTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +20,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             FastFoodTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                        RestoListScreen(modifier = Modifier.padding(innerPadding))
+                    Greeting(
+                        name = "Android",
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         }
@@ -36,16 +38,10 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
-
 @Preview(showBackground = true)
 @Composable
-/*fun GreetingPreview() {
+fun GreetingPreview() {
     FastFoodTheme {
         Greeting("Android")
-    }
-}*/
-fun RestoListPreview() {
-    FastFoodTheme {
-        RestoListScreen()
     }
 }
