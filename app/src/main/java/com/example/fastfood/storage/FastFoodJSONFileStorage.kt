@@ -1,6 +1,7 @@
 package com.example.fastfood.storage
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import com.example.fastfood.model.FastFood
 import com.example.fastfood.utility.file.JSONFileStorage
@@ -39,14 +40,8 @@ class FastFoodJSONFileStorage(context: Context) : JSONFileStorage<FastFood>(cont
             val jourJson = JSONObject()
             jourJson.put("jour", horaireJour.jour)
 
-            val matinJson = JSONObject()
-            matinJson.put("horaireMatin",horaireJour.horaireMatin)
-
-            val soirJson = JSONObject()
-            soirJson.put("horaireSoir", horaireJour.horaireSoir)
-
-            jourJson.put("horaireMatin", matinJson)
-            jourJson.put("horaireSoir", soirJson)
+            jourJson.put("horaireMatin", horaireJour.horaireMatin)
+            jourJson.put("horaireSoir", horaireJour.horaireSoir)
 
             horairesArray.put(jourJson)
         }
@@ -60,16 +55,20 @@ class FastFoodJSONFileStorage(context: Context) : JSONFileStorage<FastFood>(cont
         val horairesArray = json.getJSONArray(FastFood.HORAIREJOUR)
         for (i in 0 until horairesArray.length()) {
             val jourJson = horairesArray.getJSONObject(i)
-            val horaireMatinJson = jourJson.getJSONObject("horaireMatin")
-            val horaireSoirJson = jourJson.getJSONObject("horaireSoir")
+
+            val horaireMatin = jourJson.getString("horaireMatin")
+            val horaireSoir = jourJson.getString("horaireSoir")
 
             val horaireJour = HoraireJour(
                 jourJson.getString("jour"),
-                horaireMatinJson.toString(),
-                horaireSoirJson.toString()
+                horaireMatin,
+                horaireSoir
             )
+            //Log.d("DEBUG", "$jourJson")
+            //Log.d("DEBUG", "horaireMatin = $horaireMatin")
             horaires.add(horaireJour)
         }
+
 
         return FastFood(
             json.getInt(FastFood.ID),
@@ -84,31 +83,3 @@ class FastFoodJSONFileStorage(context: Context) : JSONFileStorage<FastFood>(cont
         )
     }
 }
-
-//import com.example.fastfood.storage.utility.file.JSONFileStorage
-/*
-class FastFoodJSONFileStorage(context: Context) : JSONFileStorage<FastFood>(context,"fastfood")  {
-    override fun create(id: Int, obj: FastFood): FastFood {
-        return FastFood(id,obj.nom,obj.address,obj.note,obj.latitude,obj.longitude,obj.description,obj.favoris,obj.horaires)
-    }
-    override fun objectToJson(id: Int, obj: FastFood): JSONObject {
-        val json=JSONObject()
-        json.put(FastFood.ID,fastfood.id)
-        json.put(FastFood.ADDRESS,fastfood.address)
-        json.put(FastFood.NOTE,fastfood.note)
-        json.put(FastFood.LATITUDE,fastfood.latitude)
-        json.put(FastFood.LONGITUDE,fastfood.longitude)
-        json.put(FastFood.DESCRIPTION,fastfood.description)
-        json.put(FastFood.FAVORIS,fastfood.favoris)
-        json.put(FastFood.HORAIREJOUR,fastfood.horaires)
-        return json
-    }
-
-    override fun jsonToObject(json: JSONObject): FastFood {
-        return FastFood(json.getInt(FastFood.ID),
-            json.getString(Color.VALUE),
-            json.getString(Color.COLOR),
-            json.getString(Color.DESCRIPTION))
-    }
-}
-*/
