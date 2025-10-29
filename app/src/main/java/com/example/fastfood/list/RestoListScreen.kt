@@ -27,7 +27,7 @@ import com.example.fastfood.R
 import com.example.fastfood.model.FastFood
 import com.example.fastfood.request.FastFoodRequest
 import com.example.fastfood.storage.FastFoodStorage
-import com.example.fastfood.ui.theme.ColorPalette.Green800
+import com.example.fastfood.ui.theme.color.ColorPalette
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,7 +81,7 @@ fun RestoListScreen(
                 title = {
                     Text(
                         text = stringResource(R.string.app_name),
-                        color = Green800,)
+                        color = ColorPalette.Black)
                 }
 
             )
@@ -94,16 +94,15 @@ fun RestoListScreen(
                 items(fastFoods) { food ->
                     Text(
 
-                    text = "${food.nom}\n - ${food.address}\n" +
-                            "Note: ${food.note} ★ | Favori: ${food.favoris}" + food.horaires.joinToString("\n") { horaire ->
-                        "${horaire.jour}: ${horaire.horaireMatin} / ${horaire.horaireSoir}"
-                    },
-                    color = Color.Black
+                        text = "${food.nom}\n - ${food.address}\n",
+                        color = ColorPalette.Black
                     )
+                    }
+
                 }
             }
         }
     }
-}
+
 
 

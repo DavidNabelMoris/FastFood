@@ -24,8 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.fastfood.list.FastFoodScreen
 import com.example.fastfood.request.FastFoodRequest
 import com.example.fastfood.storage.FastFoodStorage
-import com.example.fastfood.ui.theme.FastFoodTheme
 import com.example.fastfood.model.FastFood
+import com.example.fastfood.ui.theme.FastFoodTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
