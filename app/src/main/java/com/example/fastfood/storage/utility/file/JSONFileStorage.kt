@@ -1,6 +1,7 @@
-package com.example.fastfood.utility.file
+package com.example.fastfood.storage.utility.file
 
 import android.content.Context
+import com.example.fastfood.utility.file.FileStorage
 import org.json.JSONObject
 
 abstract class JSONFileStorage<T>(context: Context, name: String) :

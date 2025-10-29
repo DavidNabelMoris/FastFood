@@ -1,6 +1,7 @@
 package com.example.fastfood.list
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,14 +35,17 @@ import com.example.fastfood.ui.theme.ColorPalette.Green800
 fun FastFoodScreen() {
     val context = LocalContext.current
     var fastFoods by remember { mutableStateOf(listOf<FastFood>()) }
+    var allfastFoods by remember { mutableStateOf(listOf<FastFood>()) }
     var isRefreshing by remember { mutableStateOf(false) }
 
     // Chargement initial
     LaunchedEffect(Unit) {
         isRefreshing = true
-        FastFoodRequest(context) {
+        FastFoodRequest(context) { all->
+            allfastFoods=all
             fastFoods = FastFoodStorage.get(context).findAll()
             isRefreshing = false
+            Log.d("fast", "$allfastFoods")
         }
     }
 
@@ -52,7 +56,8 @@ fun FastFoodScreen() {
         isRefreshing = isRefreshing,
         onRefresh = {
             isRefreshing = true
-            FastFoodRequest(context) {
+            FastFoodRequest(context) {all->
+                allfastFoods=all
                 fastFoods = FastFoodStorage.get(context).findAll()
                 isRefreshing = false
             }
