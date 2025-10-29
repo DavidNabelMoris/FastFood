@@ -52,7 +52,7 @@ fun FastFoodScreen() {
     // Affichage de la liste
     RestoListScreen(
         context = context,
-        fastFoods = fastFoods,
+        fastFoods = allfastFoods,
         isRefreshing = isRefreshing,
         onRefresh = {
             isRefreshing = true
@@ -95,16 +95,14 @@ fun RestoListScreen(
                 modifier = Modifier.fillMaxWidth(),
                 contentPadding = PaddingValues(all = 26.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
+
+
             ) {
                 items(fastFoods) { food ->
                     Text(
+                    text = "${food.nom}\n - ${food.address}\n" + "Note: ${food.note} ★ | Favori: ${food.favoris}",
+                    modifier= Modifier.background(color=Color.Gray))
 
-                    text = "${food.nom}\n - ${food.address}\n" +
-                            "Note: ${food.note} ★ | Favori: ${food.favoris}" + food.horaires.joinToString("\n") { horaire ->
-                        "${horaire.jour}: ${horaire.horaireMatin} / ${horaire.horaireSoir}"
-                    },
-                    color = Color.Black
-                    )
                 }
             }
         }
