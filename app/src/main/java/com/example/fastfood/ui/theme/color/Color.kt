@@ -31,5 +31,6 @@ object ColorPalette {
     val Green500 = Color(0xFFA0D49B)
     val Green400 = Color(0xFFBBF0B5)
 
-    val White = Color(0xFFFFFFFF)
+    val White = Color(0xFFFFFFF)
+    val Black =Color(0x00000000)
 }
