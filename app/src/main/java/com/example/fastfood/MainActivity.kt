@@ -22,10 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.fastfood.list.FastFoodScreen
+import com.example.fastfood.list.RestoDetailScreen
 import com.example.fastfood.request.FastFoodRequest
 import com.example.fastfood.storage.FastFoodStorage
-import com.example.fastfood.model.FastFood
 import com.example.fastfood.ui.theme.FastFoodTheme
+import com.example.fastfood.model.FastFood
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +34,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FastFoodTheme {
-                FastFoodScreen()
+                /*FastFoodScreen()*/
+                RestoDetailScreen()
             }
         }
     }
@@ -79,6 +81,9 @@ fun FastFoodScreen() {
 @Composable
 fun GreetingPreview() {
     FastFoodTheme {
-        FastFoodScreen()
+        /*FastFoodScreen()
+
+         */
+        RestoDetailScreen()
     }
 }
