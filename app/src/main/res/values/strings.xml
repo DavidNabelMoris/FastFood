@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">FastFood</string>
-    <string name="success">Succès</string>
+    <string name="success">🍔 Les FastFoods ont été récupérés avec succès.</string>
     <string name="error">Echec</string>
 </resources>

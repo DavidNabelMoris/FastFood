@@ -9,10 +9,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fastfood.model.HoraireJour
@@ -27,7 +32,7 @@ fun RestoItem(
     horaires: List<HoraireJour>
 ) {
     val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
-
+    var isFavoris by remember { mutableStateOf(favoris) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -47,25 +52,59 @@ fun RestoItem(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.Gray),
-            verticalArrangement = Arrangement.spacedBy(28.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
-            Text(text = nom, color = Color.Black)
-            Text(text = adresse,color = Color.DarkGray)
-            Text(text = "Note : $note ★")
-            var text_favoris="Non"
-            if(favoris){
-                text_favoris="Oui"
-            }
-            Text(text = "Favori : ${text_favoris}")
+            // Ligne nom, favoris, note
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = nom,
+                    modifier = Modifier.weight(1f),
+                    color = Color.Black,
+                    fontSize = 20.sp
+                )
 
-            Text("Horaires :", color = Color.Green)
+                val heartIcon = if (isFavoris) com.example.fastfood.R.drawable.ic_favorite_filled
+                else com.example.fastfood.R.drawable.ic_favorite
+
+                IconButton(
+                    onClick = { isFavoris = !isFavoris }
+                ) {
+                    Icon(
+                        painter = painterResource(heartIcon),
+                        contentDescription = if (isFavoris) "Retirer des favoris" else "Ajouter aux favoris",
+                        tint = Color.Unspecified,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+
+
+                Text(
+                    text = "Note : $note ★",
+                    modifier = Modifier.weight(1f),
+                    color = Color.Magenta,
+                    fontSize = 16.sp
+                )
+            }
+
+            // Adresse
+            Text(
+                text = adresse,
+                color = Color.DarkGray,
+                fontSize = 16.sp
+            )
+
+            // Horaires
+            Text("Horaires :", color = Color.Green, fontSize = 18.sp)
             horaires.forEach { horaire ->
                 Text(
                     text = "${horaire.jour} : ${horaire.horaireMatin} / ${horaire.horaireSoir}",
-                    fontSize = 14.sp
+                    fontSize = 14.sp ,
+                    modifier = Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally)
                 )
             }
-        }
-    }
+    } }
 }
