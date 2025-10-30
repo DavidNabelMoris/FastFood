@@ -62,7 +62,7 @@ fun RestoDetailContent(fastFood: FastFood) {
                 title = {
                     Text(
                         text = "Détail du fast-food",
-                        color = ColorPalette.Green800)
+                        color = FastFoodTheme.colors.textPrimary)
                 }
             )
             Text(

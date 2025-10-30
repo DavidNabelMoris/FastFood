@@ -1,6 +1,7 @@
 package com.example.fastfood.list
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,32 +28,36 @@ import com.example.fastfood.R
 import com.example.fastfood.model.FastFood
 import com.example.fastfood.request.FastFoodRequest
 import com.example.fastfood.storage.FastFoodStorage
-import com.example.fastfood.ui.theme.color.ColorPalette
+import com.example.fastfood.ui.theme.FastFoodTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FastFoodScreen() {
     val context = LocalContext.current
     var fastFoods by remember { mutableStateOf(listOf<FastFood>()) }
+    var allfastFoods by remember { mutableStateOf(listOf<FastFood>()) }
     var isRefreshing by remember { mutableStateOf(false) }
 
     // Chargement initial
     LaunchedEffect(Unit) {
         isRefreshing = true
-        FastFoodRequest(context) {
+        FastFoodRequest(context) { all->
+            allfastFoods=all
             fastFoods = FastFoodStorage.get(context).findAll()
             isRefreshing = false
+            Log.d("fast", "$allfastFoods")
         }
     }
 
     // Affichage de la liste
     RestoListScreen(
         context = context,
-        fastFoods = fastFoods,
+        fastFoods = allfastFoods,
         isRefreshing = isRefreshing,
         onRefresh = {
             isRefreshing = true
-            FastFoodRequest(context) {
+            FastFoodRequest(context) {all->
+                allfastFoods=all
                 fastFoods = FastFoodStorage.get(context).findAll()
                 isRefreshing = false
             }
@@ -81,8 +86,7 @@ fun RestoListScreen(
                 title = {
                     Text(
                         text = stringResource(R.string.app_name),
-                        color = ColorPalette.Green800
-                    )
+                        color = FastFoodTheme.colors.textPrimary)
                 }
 
             )
@@ -91,16 +95,14 @@ fun RestoListScreen(
                 modifier = Modifier.fillMaxWidth(),
                 contentPadding = PaddingValues(all = 26.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
+
+
             ) {
                 items(fastFoods) { food ->
                     Text(
+                    text = "${food.nom}\n - ${food.address}\n" + "Note: ${food.note} ★ | Favori: ${food.favoris}",
+                    modifier= Modifier.background(color=Color.Gray))
 
-                    text = "${food.nom}\n - ${food.address}\n" +
-                            "Note: ${food.note} ★ | Favori: ${food.favoris}" + food.horaires.joinToString("\n") { horaire ->
-                        "${horaire.jour}: ${horaire.horaireMatin} / ${horaire.horaireSoir}"
-                    },
-                    color = Color.Black
-                    )
                 }
             }
         }

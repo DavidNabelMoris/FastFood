@@ -24,6 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".RestoItemActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="Détails du restaurant"
+            android:exported="false" />
     </application>
 
 </manifest>
