@@ -1,6 +1,7 @@
 package com.example.fastfood.list
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,9 @@ import com.example.fastfood.model.FastFood
 import com.example.fastfood.request.FastFoodRequest
 import com.example.fastfood.storage.FastFoodStorage
 import com.example.fastfood.ui.theme.ColorPalette.Green800
+import androidx.compose.foundation.clickable
+import com.example.fastfood.RestoItemActivity
+import com.example.fastfood.list.composable.RestoItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -101,8 +105,22 @@ fun RestoListScreen(
                 items(fastFoods) { food ->
                     Text(
                     text = "${food.nom}\n - ${food.address}\n" + "Note: ${food.note} ★ | Favori: ${food.favoris}",
-                    modifier= Modifier.background(color=Color.Gray))
+                        modifier = Modifier
+                            .background(Color.Gray)
+                            .clickable {
+                                Log.d("FastFoodClick", "Nom du resto : ${food.nom}")
+                                val intent = Intent(context, RestoItemActivity::class.java)
+                                intent.putExtra("nom", food.nom)
+                                intent.putExtra("address", food.address)
+                                intent.putExtra("note", food.note)
+                                intent.putExtra("favoris", food.favoris)
+                                intent.putExtra("description", food.description)
+                                intent.putParcelableArrayListExtra("horaires", ArrayList(food.horaires))
+                                context.startActivity(intent)
 
+                            }
+                            .padding(8.dp)
+                    )
                 }
             }
         }

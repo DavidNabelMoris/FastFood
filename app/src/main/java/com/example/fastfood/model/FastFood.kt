@@ -1,11 +1,14 @@
 package com.example.fastfood.model
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-
+@Parcelize
 data class HoraireJour(
     val jour: String,
     val horaireMatin: String,
     val horaireSoir: String
-)
+): Parcelable
+@Parcelize
 data class FastFood (
     val id: Int,
     val nom: String,
@@ -16,7 +19,7 @@ data class FastFood (
     val description: String,
     val favoris: Boolean,
     val horaires: List<HoraireJour>
-){
+): Parcelable{
     companion object {
         const val ID = "id"
         const val NOM = "nom"
