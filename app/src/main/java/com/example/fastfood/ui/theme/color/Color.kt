@@ -16,27 +16,28 @@ interface ColorScheme {
 }
 
 class LightColorScheme : ColorScheme {
-    override val textPrimary: Color = ColorPalette.Gray900
-    override val background: Color = ColorPalette.Gray500
-    override val cardBackground: Color = ColorPalette.White
-    override val primaryContainer: Color = ColorPalette.Green400
-    override val onPrimaryContainer: Color = ColorPalette.Gray700
-    override val surface: Color = ColorPalette.Gray400
-    override val primary: Color = ColorPalette.Green600
-    override val onPrimary: Color = ColorPalette.White
-    override val primaryDisabled: Color = ColorPalette.Gray500
-    override val onPrimaryDisabled: Color = ColorPalette.Gray600
+    override val textPrimary: Color = ColorPalette.OnSurfaceLight
+    override val background: Color = ColorPalette.BackgroundLight
+    override val cardBackground: Color = ColorPalette.SurfaceLight
+    override val primaryContainer: Color = ColorPalette.PrimaryContainerLight
+    override val onPrimaryContainer: Color = ColorPalette.OnPrimaryContainerLight
+    override val surface: Color = ColorPalette.SurfaceVariantLight
+    override val primary: Color = ColorPalette.PrimaryLight
+    override val onPrimary: Color = ColorPalette.OnPrimaryLight
+    override val primaryDisabled: Color = ColorPalette.Gray150
+    override val onPrimaryDisabled: Color = ColorPalette.OnSurfaceVariantLight
 }
 
+
 class DarkColorScheme : ColorScheme {
-    override val textPrimary: Color = ColorPalette.White
-    override val background: Color = ColorPalette.Gray800
-    override val cardBackground: Color = ColorPalette.Gray700
-    override val primaryContainer: Color = ColorPalette.Green700
-    override val onPrimaryContainer: Color = ColorPalette.Green400
-    override val surface: Color = ColorPalette.Gray600
-    override val primary: Color = ColorPalette.Green500
-    override val onPrimary: Color = ColorPalette.Green800
-    override val primaryDisabled: Color = ColorPalette.Gray650
-    override val onPrimaryDisabled: Color = ColorPalette.Gray550
+    override val textPrimary: Color = ColorPalette.OnSurfaceDark
+    override val background: Color = ColorPalette.BackgroundDark
+    override val cardBackground: Color = ColorPalette.SurfaceDark
+    override val primaryContainer: Color = ColorPalette.PrimaryContainerDark
+    override val onPrimaryContainer: Color = ColorPalette.OnPrimaryContainerDark
+    override val surface: Color = ColorPalette.SurfaceVariantDark
+    override val primary: Color = ColorPalette.PrimaryDark
+    override val onPrimary: Color = ColorPalette.OnPrimaryDark
+    override val primaryDisabled: Color = ColorPalette.Gray700
+    override val onPrimaryDisabled: Color = ColorPalette.OnSurfaceVariantDark
 }

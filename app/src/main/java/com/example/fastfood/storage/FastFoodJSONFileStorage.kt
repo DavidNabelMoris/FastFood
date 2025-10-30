@@ -1,10 +1,8 @@
 package com.example.fastfood.storage
 
 import android.content.Context
-import android.util.Log
-import androidx.compose.ui.graphics.Color
 import com.example.fastfood.model.FastFood
-import com.example.fastfood.utility.file.JSONFileStorage
+import com.example.fastfood.storage.utility.file.JSONFileStorage
 import org.json.JSONObject
 import com.example.fastfood.model.HoraireJour
 import org.json.JSONArray

@@ -13,7 +13,9 @@ import com.example.fastfood.storage.FastFoodStorage
 import org.json.JSONObject
 
 //recuperation des FastFood depuis une API
-class FastFoodRequest(private val context: Context, onUpdate: () -> Unit) {
+class FastFoodRequest(private val context: Context, onUpdate: (List<FastFood>) -> Unit) {
+    // Variable qui contient tous les restaurants
+    val allFastFoods = mutableListOf<FastFood>()
     init {
         val queue = Volley.newRequestQueue(context)
 
@@ -25,7 +27,7 @@ class FastFoodRequest(private val context: Context, onUpdate: () -> Unit) {
                 Log.e("FastFoodRequest", "Ces bien JSON :")
                 Toast.makeText(context, R.string.success, Toast.LENGTH_SHORT).show()
                 refresh(res)
-                onUpdate()
+                onUpdate(allFastFoods) // passe la liste
             },
             { err ->
                 Log.e("FastFoodRequest", "Erreur téléchargement JSON : ${err.message}", err)
@@ -57,6 +59,7 @@ class FastFoodRequest(private val context: Context, onUpdate: () -> Unit) {
             // Conversion du tableau d’horaires JSON en liste
             val horairesArray = obj.getJSONArray(FastFood.HORAIREJOUR)
             val horaires = mutableListOf<HoraireJour>()
+
             for (i in 0 until horairesArray.length()) {
                 val jourJson = horairesArray.getJSONObject(i)
                 val matin = jourJson.getString("horaireMatin")
@@ -70,20 +73,24 @@ class FastFoodRequest(private val context: Context, onUpdate: () -> Unit) {
                 horaires.add(horaireJour)
             }
 
-            // Création et insertion de l’objet FastFood
-            FastFoodStorage.get(context).insert(
-                FastFood(
-                    id = 0,
-                    obj.getString(FastFood.NOM),
-                    obj.getString(FastFood.ADDRESS),
-                    obj.getDouble(FastFood.NOTE).toFloat(),
-                    obj.getDouble(FastFood.LATITUDE),
-                    obj.getDouble(FastFood.LONGITUDE),
-                    obj.getString(FastFood.DESCRIPTION),
-                    obj.getBoolean(FastFood.FAVORIS),
-                    horaires
-                )
-            )
+            //Création de l’objet FastFood
+            val fastfood: FastFood=FastFood(id = 0,
+            obj.getString(FastFood.NOM),
+            obj.getString(FastFood.ADDRESS),
+            obj.getDouble(FastFood.NOTE).toFloat(),
+            obj.getDouble(FastFood.LATITUDE),
+            obj.getDouble(FastFood.LONGITUDE),
+            obj.getString(FastFood.DESCRIPTION),
+            obj.getBoolean(FastFood.FAVORIS),
+            horaires)
+
+            // insertion de l’objet FastFood dans le fichier local si favoris
+            if(fastfood.favoris){
+                FastFoodStorage.get(context).insert(fastfood)
+            }
+
+            // Ajoute tous les restaurants dans la variable mémoire
+            allFastFoods.add(fastfood)
         }
     }
 }

@@ -23,88 +23,62 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.fastfood.R
 import com.example.fastfood.model.FastFood
 import com.example.fastfood.request.FastFoodRequest
 import com.example.fastfood.storage.FastFoodStorage
+import com.example.fastfood.ui.theme.FastFoodTheme
 import com.example.fastfood.ui.theme.color.ColorPalette
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FastFoodScreen() {
+fun RestoDetailScreen() {
     val context = LocalContext.current
-    var fastFoods by remember { mutableStateOf(listOf<FastFood>()) }
+    var fastFood by remember { mutableStateOf<FastFood?>(null) }
     var isRefreshing by remember { mutableStateOf(false) }
 
-    // Chargement initial
     LaunchedEffect(Unit) {
         isRefreshing = true
         FastFoodRequest(context) {
-            fastFoods = FastFoodStorage.get(context).findAll()
+            fastFood = FastFoodStorage.get(context).find(id = 1)
             isRefreshing = false
         }
     }
-
-    // Affichage de la liste
-    RestoListScreen(
-        context = context,
-        fastFoods = fastFoods,
-        isRefreshing = isRefreshing,
-        onRefresh = {
-            isRefreshing = true
-            FastFoodRequest(context) {
-                fastFoods = FastFoodStorage.get(context).findAll()
-                isRefreshing = false
-            }
-        }
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RestoListScreen(
-    modifier: Modifier = Modifier,
-    context: Context = LocalContext.current,
-    fastFoods: List<FastFood>,
-    isRefreshing: Boolean,
-    onRefresh: () -> Unit
-) {
+fun RestoDetailContent(fastFood: FastFood) {
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(Color.LightGray)
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
-        ){
+        ) {
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(R.string.app_name),
-                        color = ColorPalette.Green800
-                    )
+                        text = "Détail du fast-food",
+                        color = ColorPalette.Green800)
                 }
-
             )
-
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(all = 26.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                items(fastFoods) { food ->
-                    Text(
-
-                    text = "${food.nom}\n - ${food.address}\n" +
-                            "Note: ${food.note} ★ | Favori: ${food.favoris}" + food.horaires.joinToString("\n") { horaire ->
-                        "${horaire.jour}: ${horaire.horaireMatin} / ${horaire.horaireSoir}"
-                    },
-                    color = Color.Black
-                    )
-                }
-            }
+            Text(
+                text = "${fastFood.nom}\n - ${fastFood.address}\n" +
+                        "Note: ${fastFood.note} ★ | Favori: ${fastFood.favoris}\n" +
+                        fastFood.horaires.joinToString("\n") { horaire ->
+                            "${horaire.jour}: ${horaire.horaireMatin} / ${horaire.horaireSoir}"
+                        }
+            )
         }
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    RestoDetailScreen()
+}
 
