@@ -31,9 +31,16 @@ import com.example.fastfood.request.FastFoodRequest
 import com.example.fastfood.storage.FastFoodStorage
 import com.example.fastfood.ui.theme.ColorPalette.Green800
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.painterResource
 import com.example.fastfood.RestoItemActivity
 import com.example.fastfood.list.composable.RestoItem
-
+import com.example.fastfood.storage.FastFoodStorage.estDans
+import com.example.fastfood.storage.FastFoodStorage.estDansIndice
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FastFoodScreen() {
@@ -53,10 +60,25 @@ fun FastFoodScreen() {
         }
     }
 
+    fun fusion_liste(api: List<FastFood>, locale:List<FastFood>,context: Context):List<FastFood>{
+        val resList = mutableListOf<FastFood>()
+
+        resList.addAll(locale)
+
+        for (fastfood in api) {
+            val existeDeja = estDans(context,fastfood.nom,fastfood.address)
+            if (!existeDeja) {
+                resList.add(fastfood)
+            }
+        }
+        return resList
+    }
+    val ListFastFood = remember(allfastFoods, fastFoods) {fusion_liste(allfastFoods,fastFoods,context)}
+
     // Affichage de la liste
     RestoListScreen(
         context = context,
-        fastFoods = allfastFoods,
+        fastFoods = ListFastFood,
         isRefreshing = isRefreshing,
         onRefresh = {
             isRefreshing = true
@@ -65,6 +87,9 @@ fun FastFoodScreen() {
                 fastFoods = FastFoodStorage.get(context).findAll()
                 isRefreshing = false
             }
+        } ,
+        FavorisChange = { List ->
+            fastFoods = List
         }
     )
 }
@@ -76,7 +101,8 @@ fun RestoListScreen(
     context: Context = LocalContext.current,
     fastFoods: List<FastFood>,
     isRefreshing: Boolean,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    FavorisChange:(List<FastFood>)-> Unit
 ) {
     Box(
         modifier = modifier
@@ -94,37 +120,97 @@ fun RestoListScreen(
                 }
 
             )
-
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(all = 26.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-
-
+            PullToRefreshBox(
+                isRefreshing = isRefreshing,
+                onRefresh = onRefresh
             ) {
-                items(fastFoods) { food ->
-                    Text(
-                    text = "${food.nom}\n - ${food.address}\n" + "Note: ${food.note} ★ | Favori: ${food.favoris}",
-                        modifier = Modifier
-                            .background(Color.Gray)
-                            .clickable {
-                                Log.d("FastFoodClick", "Nom du resto : ${food.nom}")
-                                val intent = Intent(context, RestoItemActivity::class.java)
-                                intent.putExtra("nom", food.nom)
-                                intent.putExtra("address", food.address)
-                                intent.putExtra("note", food.note)
-                                intent.putExtra("favoris", food.favoris)
-                                intent.putExtra("description", food.description)
-                                intent.putParcelableArrayListExtra("horaires", ArrayList(food.horaires))
-                                context.startActivity(intent)
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = PaddingValues(all = 26.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
 
+
+                ) {
+                    items(fastFoods) { food ->
+                        var isFavoris = estDans(context, food.nom, food.address)
+                        val heartIcon = if (isFavoris) com.example.fastfood.R.drawable.ic_favorite_filled
+                        else com.example.fastfood.R.drawable.ic_favorite
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.Gray)
+                                .clickable {
+                                    Log.d("FastFoodClick", "Nom du resto : ${food.nom}")
+                                    val intent = Intent(context, RestoItemActivity::class.java)
+
+                                    val id_food_save: Int?=estDansIndice(context,food.nom,food.address)
+
+                                    if(id_food_save!=null){
+                                        val food_save=FastFoodStorage.get(context).find(id_food_save)
+                                        intent.putExtra("fastfood", food_save)
+                                        Log.d("FastFoodSAVE", "ON UTILISE LA SAUVEAGRDE")
+                                    }
+                                    else{
+                                        intent.putExtra("fastfood", food) // un objet FastFood
+                                    }
+                                    context.startActivity(intent)
+
+                                }
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "${food.nom}\n - ${food.address}\nNote: ${food.note} ★",
+                                color = Color.Black,
+                                modifier = Modifier.weight(1f)
+                            )
+                            IconButton(
+                                onClick = {
+                                    isFavoris = !isFavoris
+                                    val storage = FastFoodStorage.get(context)
+
+                                    if (isFavoris) {
+                                        // Ajouter dans le fichier local si pas déjà présent
+                                        if (!estDans(context,food.nom,food.address)) {
+                                            storage.insert(food.copy(favoris = true))
+                                            Log.d("FastFoodUpdate", "Favori ajouté pour ${food.nom}")
+                                        }
+                                    }
+
+                                    else{
+                                        var id_supprime:Int?=estDansIndice(context,food.nom,food.address)
+
+                                        if(id_supprime!=null){
+                                            storage.delete(id_supprime)
+                                            Log.d("FastFoodSupprimeFavoris", "Favori supprimer ${food.nom}")
+                                        }
+                                        else{
+                                            Log.d("FastFoodSupprimeFavoris", "Favori introuvable pour ${food.nom}")
+                                        }
+                                    }
+                                    // 🔄 Mettre à jour fastFoods pour déclencher recomposition
+                                    FavorisChange(storage.findAll())
+                                }
+                            ) {
+                                Icon(
+                                    painter = painterResource(heartIcon),
+                                    contentDescription = if (isFavoris) "Retirer des favoris" else "Ajouter aux favoris",
+                                    tint = Color.Unspecified,
+                                    modifier = Modifier.size(24.dp)
+                                )
                             }
-                            .padding(8.dp)
-                    )
+                        }
+
+
+                    }
                 }
             }
         }
     }
+
+
 }
 
 
