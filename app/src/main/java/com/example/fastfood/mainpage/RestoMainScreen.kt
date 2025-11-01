@@ -1,5 +1,6 @@
 package com.example.fastfood.mainpage
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,15 +12,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,20 +44,35 @@ fun RestoMainScreen() {
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Title
-            Text(
-                text = stringResource(R.string.app_name),
-                color = FastFoodTheme.colors.textPrimary,
-                fontSize = 34.sp,
-                fontWeight = FontWeight.Bold,
+
+            // --- Header: title + logo ---
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp, bottom = 24.dp)
-            )
+                    .padding(top = 8.dp, bottom = 24.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                painter = painterResource(id = R.drawable.logo), // drawable/fastfoods_logo.png
+                // painter = painterResource(id = R.mipmap.ic_logo),       // if using launcher icon from mipmap
+                contentDescription = "FastFoods logo",
+                modifier = Modifier.size(80.dp)
+                )
+                Text(
+                    text = stringResource(R.string.app_name),
+                    color = FastFoodTheme.colors.textPrimary,
+                    fontSize = 34.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
+                )
 
-            // Use my location button
+                // Use one of the two lines below depending on where your image is
+
+            }
+
             Button(
-                onClick = { /* TODO: handle location */ },
+                onClick = { /* TODO */ },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),
@@ -67,14 +82,6 @@ fun RestoMainScreen() {
                     contentColor = FastFoodTheme.colors.textPrimary
                 )
             ) {
-                /*TextField(
-                    state = rememberTextFieldState("Hello\nWorld\nInvisible"),
-                    lineLimits = TextFieldLineLimits.MultiLine(maxHeightInLines = 2),
-                    placeholder = { Text("") },
-                    textStyle = TextStyle(color = Color.Blue, fontWeight = FontWeight.Bold),
-                    label = { Text("Enter text") },
-                    modifier = Modifier.padding(20.dp)
-                )*/
                 Icon(
                     imageVector = Icons.Default.LocationOn,
                     contentDescription = null,
@@ -86,11 +93,11 @@ fun RestoMainScreen() {
 
             Spacer(Modifier.height(16.dp))
 
-            // Search field
+            // --- Search field ---
             OutlinedTextField(
                 value = query,
                 onValueChange = setQuery,
-                textStyle = TextStyle(FastFoodTheme.colors.textSearch),
+                textStyle = TextStyle(color = FastFoodTheme.colors.textPrimary),
                 placeholder = { Text(stringResource(R.string.search)) },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                 singleLine = true,
@@ -98,44 +105,40 @@ fun RestoMainScreen() {
                     .fillMaxWidth()
                     .height(56.dp),
                 shape = RoundedCornerShape(18.dp),
-
             )
 
             Spacer(Modifier.height(16.dp))
 
-            // Category chips (two rows)
+            // --- Category chips ---
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                CategoryChip("Burgers")
-                CategoryChip("Pizza")
-                CategoryChip("Asian")
+                CategoryChip("Burgers"); CategoryChip("Pizza"); CategoryChip("Asian")
             }
             Spacer(Modifier.height(12.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                CategoryChip("Vegan")
-                CategoryChip("Desserts")
-                CategoryChip("Kebab")
+                CategoryChip("Vegan"); CategoryChip("Desserts"); CategoryChip("Kebab")
             }
+
             FastFoodScreen()
         }
 
-        // Floating action button (bottom end)
+        // --- Floating action button ---
         FloatingActionButton(
-            onClick = { /* TODO: add new restaurant */ },
+            onClick = { /* TODO */ },
             containerColor = FastFoodTheme.colors.primary,
             contentColor = FastFoodTheme.colors.onPrimary,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
+            modifier = Modifier.align(Alignment.BottomEnd)
         ) {
             Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add))
         }
     }
 }
+
 
 @Composable
 private fun CategoryChip(label: String) {

@@ -3,8 +3,10 @@ package com.example.fastfood.list
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,32 +17,39 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.res.stringResource
-import com.example.fastfood.R
 import com.example.fastfood.model.FastFood
 import com.example.fastfood.request.FastFoodRequest
 import com.example.fastfood.storage.FastFoodStorage
-import com.example.fastfood.ui.theme.ColorPalette.Green800
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.fastfood.RestoItemActivity
 import com.example.fastfood.list.composable.RestoItem
 import com.example.fastfood.storage.FastFoodStorage.estDans
 import com.example.fastfood.storage.FastFoodStorage.estDansIndice
+import com.example.fastfood.ui.theme.FastFoodTheme
+import coil.compose.rememberAsyncImagePainter
+
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FastFoodScreen() {
@@ -107,19 +116,11 @@ fun RestoListScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.LightGray)
+            .background(FastFoodTheme.colors.background)
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ){
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.app_name),
-                        color = Green800,)
-                }
-
-            )
             PullToRefreshBox(
                 isRefreshing = isRefreshing,
                 onRefresh = onRefresh
@@ -139,7 +140,7 @@ fun RestoListScreen(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(Color.Gray)
+                                .background(FastFoodTheme.colors.surface)
                                 .clickable {
                                     Log.d("FastFoodClick", "Nom du resto : ${food.nom}")
                                     val intent = Intent(context, RestoItemActivity::class.java)
@@ -158,13 +159,25 @@ fun RestoListScreen(
 
                                 }
                                 .padding(8.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
+                            horizontalArrangement = Arrangement.SpaceAround,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
+                            val imgName = java.net.URLEncoder.encode(food.nom, "UTF-8").replace("+", "%20")
+                            val imageUrl = "http://51.68.91.213/gr-3-5/img/$imgName.png"
+
+                            Image(
+                                painter = rememberAsyncImagePainter(model = imageUrl),
+                                contentDescription = "img de ${food.nom}",
+                                modifier = Modifier
+                                    .size(50.dp)
+                                    .clip(CircleShape),
+
+                                contentScale = ContentScale.Crop
+                            )
+
                             Text(
                                 text = "${food.nom}\n - ${food.address}\nNote: ${food.note} ★",
-                                color = Color.Black,
-                                modifier = Modifier.weight(1f)
+                                color = FastFoodTheme.colors.textPrimary
                             )
                             IconButton(
                                 onClick = {
@@ -212,5 +225,42 @@ fun RestoListScreen(
 
 
 }
+@Preview(showBackground = true)
+@Composable
+fun RestoListScreenPreview() {
+    FastFoodTheme {
+        val sample = listOf(
+            FastFood(
+                id = 1,
+                nom = "Burger Street",
+                address = "12 rue de la Paix",
+                note = 4.5f,
+                latitude = 45.7640,
+                longitude = 4.8357,
+                description = "Burgers & fries",
+                favoris = true,
+                horaires = emptyList()
+            ),
+            FastFood(
+                id = 2,
+                nom = "Pizza Nova",
+                address = "8 avenue des Alpes",
+                note = 4.1f,
+                latitude = 45.1885,
+                longitude = 5.7245,
+                description = "Wood-fired pizzas",
+                favoris = false,
+                horaires = emptyList()
+            )
+        )
+        RestoListScreen(
+            fastFoods = sample,
+            isRefreshing = false,
+            onRefresh = {},
+            FavorisChange = {}
+        )
+    }
+}
+
 
 

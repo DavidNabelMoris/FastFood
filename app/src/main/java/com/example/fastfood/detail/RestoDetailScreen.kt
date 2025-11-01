@@ -45,6 +45,11 @@ fun RestoDetailScreen() {
             isRefreshing = false
         }
     }
+    when {
+        isRefreshing -> Text("Loading...", color = FastFoodTheme.colors.textPrimary)
+        fastFood != null -> RestoDetailContent(fastFood!!)
+        else -> Text("No data", color = FastFoodTheme.colors.textPrimary)
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
