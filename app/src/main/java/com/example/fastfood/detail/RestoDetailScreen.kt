@@ -79,6 +79,6 @@ fun RestoDetailContent(fastFood: FastFood) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    RestoDetailScreen()
+    FastFoodTheme { RestoDetailScreen() }
 }
 

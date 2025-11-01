@@ -9,22 +9,22 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.res.stringResource
-import com.example.fastfood.R
+
+import androidx.compose.ui.tooling.preview.Preview
+
 import com.example.fastfood.model.FastFood
 import com.example.fastfood.request.FastFoodRequest
 import com.example.fastfood.storage.FastFoodStorage
@@ -82,14 +82,7 @@ fun RestoListScreen(
         Column(
             modifier = Modifier.fillMaxWidth()
         ){
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.app_name),
-                        color = FastFoodTheme.colors.textPrimary)
-                }
 
-            )
 
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
@@ -101,12 +94,18 @@ fun RestoListScreen(
                 items(fastFoods) { food ->
                     Text(
                     text = "${food.nom}\n - ${food.address}\n" + "Note: ${food.note} ★ | Favori: ${food.favoris}",
-                    modifier= Modifier.background(color=Color.Gray))
+                    color = FastFoodTheme.colors.textPrimary)
 
                 }
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RestoMainScreenPreview() {
+    FastFoodTheme { FastFoodScreen() }
 }
 
 

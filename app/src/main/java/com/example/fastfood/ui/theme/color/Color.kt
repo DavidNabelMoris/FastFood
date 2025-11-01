@@ -13,6 +13,7 @@ interface ColorScheme {
     val onPrimary: Color
     val primaryDisabled: Color
     val onPrimaryDisabled: Color
+    val textSearch : Color
 }
 
 class LightColorScheme : ColorScheme {
@@ -26,6 +27,7 @@ class LightColorScheme : ColorScheme {
     override val onPrimary: Color = ColorPalette.OnPrimaryLight
     override val primaryDisabled: Color = ColorPalette.Gray150
     override val onPrimaryDisabled: Color = ColorPalette.OnSurfaceVariantLight
+    override val textSearch: Color = ColorPalette.OnSurfaceLight
 }
 
 
@@ -40,4 +42,5 @@ class DarkColorScheme : ColorScheme {
     override val onPrimary: Color = ColorPalette.OnPrimaryDark
     override val primaryDisabled: Color = ColorPalette.Gray700
     override val onPrimaryDisabled: Color = ColorPalette.OnSurfaceVariantDark
+    override val textSearch: Color = ColorPalette.SurfaceLight
 }

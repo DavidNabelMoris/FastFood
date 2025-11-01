@@ -18,9 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.fastfood.list.FastFoodScreen
 import com.example.fastfood.model.HoraireJour
+import com.example.fastfood.ui.theme.FastFoodTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,4 +110,23 @@ fun RestoItem(
                 )
             }
     } }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun RestoItemPreview() {
+    FastFoodTheme {
+        RestoItem(
+            nom = "Burger Street",
+            adresse = "12 Rue de la République, Chambéry",
+            note = 4.5f,
+            favoris = true,
+            horaires = listOf(
+                HoraireJour("Lundi", "11:00–14:00", "17:30–21:00"),
+                HoraireJour("Mardi", "11:00–14:00", "17:30–21:00"),
+                HoraireJour("Mercredi", "11:00–14:00", "17:30–22:00")
+            )
+        )
+    }
 }

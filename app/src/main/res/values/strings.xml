@@ -2,4 +2,7 @@
     <string name="app_name">FastFood</string>
     <string name="success">🍔 Les FastFoods ont été récupérés avec succès.</string>
     <string name="error">Echec</string>
+    <string name="use_my_location">Use my location</string>
+    <string name="search">Search</string>
+    <string name="add">Add</string>
 </resources>
