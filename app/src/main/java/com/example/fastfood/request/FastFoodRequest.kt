@@ -10,6 +10,7 @@ import com.example.fastfood.R
 import com.example.fastfood.model.FastFood
 import com.example.fastfood.model.HoraireJour
 import com.example.fastfood.storage.FastFoodStorage
+import com.example.fastfood.storage.FastFoodStorage.estDans
 import org.json.JSONObject
 
 //recuperation des FastFood depuis une API
@@ -39,7 +40,7 @@ class FastFoodRequest(private val context: Context, onUpdate: (List<FastFood>) -
     }
 
     private fun refresh(json: JSONObject) {
-        delete()
+        //delete()
         insert(json)
     }
 
@@ -84,13 +85,16 @@ class FastFoodRequest(private val context: Context, onUpdate: (List<FastFood>) -
             obj.getBoolean(FastFood.FAVORIS),
             horaires)
 
-            // insertion de l’objet FastFood dans le fichier local si favoris
-            if(fastfood.favoris){
+            // insertion de l’objet FastFood dans le fichier local si favoris et pas deja dans le fichier
+            if(fastfood.favoris && !estDans(context,fastfood.nom,fastfood.address)){
                 FastFoodStorage.get(context).insert(fastfood)
             }
-
+            else{
+                Log.d("FastFoodRequest", "Le resto ${fastfood.nom} n'est pas favori ou et deja dans le fichier.")
+            }
             // Ajoute tous les restaurants dans la variable mémoire
             allFastFoods.add(fastfood)
         }
     }
+
 }
