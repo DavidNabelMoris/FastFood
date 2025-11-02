@@ -30,6 +30,7 @@
     import androidx.compose.foundation.layout.Row
     import androidx.compose.foundation.layout.size
     import androidx.compose.foundation.shape.CircleShape
+    import androidx.compose.foundation.shape.RoundedCornerShape
     import androidx.compose.material3.Icon
     import androidx.compose.material3.IconButton
     import androidx.compose.runtime.setValue
@@ -123,7 +124,9 @@
         Box(
             modifier = modifier
                 .fillMaxSize()
-                .background(FastFoodTheme.colors.background)
+                .background(FastFoodTheme.colors.background,
+                        shape = RoundedCornerShape(24.dp)
+                )
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth()
@@ -147,7 +150,8 @@
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .background(FastFoodTheme.colors.surface)
+                                    .background(FastFoodTheme.colors.surface,
+                                            shape = RoundedCornerShape(24.dp))
                                     .clickable {
                                         Log.d("FastFoodClick", "Nom du resto : ${food.nom}")
                                         val intent = Intent(context, RestoItemActivity::class.java)
@@ -166,8 +170,10 @@
 
                                     }
                                     .padding(8.dp),
-                                horizontalArrangement = Arrangement.SpaceAround,
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
+
+
                             ) {
                                 val imgName = java.net.URLEncoder.encode(food.nom, "UTF-8").replace("+", "%20")
                                 val imageUrl = "http://51.68.91.213/gr-3-5/img/$imgName.png"
@@ -193,6 +199,7 @@
                                 Text(
                                     text = "${food.nom}\n - ${food.address}\nDistance: $distanceText",
                                     color = FastFoodTheme.colors.textPrimary
+
                                 )
 
                                 IconButton(

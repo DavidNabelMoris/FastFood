@@ -58,7 +58,8 @@ fun RestoDetailContent(fastFood: FastFood) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.LightGray)
+            .background(
+                color = FastFoodTheme.colors.surface)
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
@@ -75,7 +76,10 @@ fun RestoDetailContent(fastFood: FastFood) {
                         "Note: ${fastFood.note} ★ | Favori: ${fastFood.favoris}\n" +
                         fastFood.horaires.joinToString("\n") { horaire ->
                             "${horaire.jour}: ${horaire.horaireMatin} / ${horaire.horaireSoir}"
-                        }
+                        },
+                color = FastFoodTheme.colors.textPrimary
+
+
             )
         }
     }

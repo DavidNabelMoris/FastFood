@@ -109,25 +109,10 @@ fun RestoMainScreen(onUseMyLocation: () -> Unit) {
 
             Spacer(Modifier.height(16.dp))
 
-            // --- Category chips ---
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                CategoryChip("Burgers"); CategoryChip("Pizza"); CategoryChip("Asian")
-            }
-            Spacer(Modifier.height(12.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                CategoryChip("Vegan"); CategoryChip("Desserts"); CategoryChip("Kebab")
-            }
 
             FastFoodScreen()
         }
 
-        // --- Floating action button ---
         FloatingActionButton(
             onClick = { /* TODO */ },
             containerColor = FastFoodTheme.colors.primary,

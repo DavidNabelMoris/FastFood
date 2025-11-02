@@ -42,8 +42,11 @@ fun RestoItem(food: FastFood
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(FastFoodTheme.colors.background)
     ) {
         TopAppBar(
+            modifier = Modifier
+                .background(FastFoodTheme.colors.textPrimary),
             title = { Text("Détails du restaurant") },
             navigationIcon = {
                 IconButton(onClick = { backDispatcher?.onBackPressed() }) {
@@ -52,13 +55,13 @@ fun RestoItem(food: FastFood
                         contentDescription = "Retour"
                     )
                 }
-            }
-        )
+            })
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
+
             verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
             // Ligne nom, favoris, note
@@ -69,7 +72,7 @@ fun RestoItem(food: FastFood
                 Text(
                     text = food.nom,
                     modifier = Modifier.weight(1f),
-                    color = Color.Black,
+                    color = FastFoodTheme.colors.textPrimary,
                     fontSize = 20.sp
                 )
 
@@ -118,7 +121,7 @@ fun RestoItem(food: FastFood
                 Text(
                     text = "Note : ${food.note} ★",
                     modifier = Modifier.weight(1f),
-                    color = Color.Magenta,
+                    color = FastFoodTheme.colors.primary,
                     fontSize = 16.sp
                 )
             }
@@ -126,17 +129,20 @@ fun RestoItem(food: FastFood
             // Adresse
             Text(
                 text = food.address,
-                color = Color.DarkGray,
+                color = FastFoodTheme.colors.textPrimary,
                 fontSize = 16.sp
             )
 
             // Horaires
-            Text("Horaires :", color = Color.Green, fontSize = 18.sp)
+            Text("Horaires :", color = FastFoodTheme.colors.textPrimary, fontSize = 18.sp)
             food.horaires.forEach { horaire ->
                 Text(
                     text = "${horaire.jour} : ${horaire.horaireMatin} / ${horaire.horaireSoir}",
                     fontSize = 14.sp ,
-                    modifier = Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.CenterHorizontally),
+                    color = FastFoodTheme.colors.textPrimary
                 )
             }
         } }

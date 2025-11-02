@@ -8,18 +8,21 @@ import com.example.fastfood.list.composable.RestoItem
 import com.example.fastfood.model.FastFood
 
 import com.example.fastfood.model.HoraireJour
-
+import com.example.fastfood.ui.theme.FastFoodTheme
 
 class RestoItemActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val food: FastFood? = intent.getParcelableExtra("fastfood")
+        val fastfood = intent.getParcelableExtra<FastFood>("fastfood")
 
         setContent {
-            if (food != null) {
-                RestoItem(food)
+            FastFoodTheme {
+                if (fastfood != null) {
+                    RestoItem(fastfood)
+                }
             }
         }
     }
 }
+
