@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FastFoodTheme {
                 RestoMainScreen(
-                    onUseMyLocation = { requestLocationPermission() }   // <-- matches screen
+                    onUseMyLocation = { requestLocationPermission()}   // <-- matches screen
                 )
             }
         }

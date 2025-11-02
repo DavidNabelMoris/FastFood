@@ -54,6 +54,9 @@
         var allfastFoods by remember { mutableStateOf(listOf<FastFood>()) }
         var isRefreshing by remember { mutableStateOf(false) }
 
+        // Localisation utilisateur
+        var lat by remember { mutableStateOf<Double?>(null) }
+        var lon by remember { mutableStateOf<Double?>(null) }
 
         // Chargement initial
         LaunchedEffect(Unit) {
@@ -63,6 +66,11 @@
                 fastFoods = FastFoodStorage.get(context).findAll()
                 isRefreshing = false
                 Log.d("fast", "$allfastFoods")
+            }
+            // Récupère la position
+            RestoLocation.calcul_position(context) { latitude, longitude ->
+                lat = latitude
+                lon = longitude
             }
         }
 
@@ -79,12 +87,28 @@
             }
             return resList
         }
-        val ListFastFood = remember(allfastFoods, fastFoods) {fusion_liste(allfastFoods,fastFoods,context)}
+        val ListFastFood = remember(allfastFoods, fastFoods) {
+            fusion_liste(allfastFoods,fastFoods,context)
+        }
+
+        val ListFinal = remember(ListFastFood, lat, lon) {
+            // Si on connaît la position
+            if (lat != null && lon != null) {
+                Log.d("Liste","La liste est trié selon la distance")
+                ListFastFood.sortedBy { fastFood ->
+                    RestoLocation.calculateDistance(lat!!, lon!!, fastFood.latitude, fastFood.longitude)
+                }
+            }
+            else {
+                Log.d("Liste","Liste non trié")
+                ListFastFood
+            }
+        }
 
         // Affichage de la liste
         RestoListScreen(
             context = context,
-            fastFoods = ListFastFood,
+            fastFoods = ListFinal,
             isRefreshing = isRefreshing,
             onRefresh = {
                 isRefreshing = true
@@ -108,7 +132,7 @@
         fastFoods: List<FastFood>,
         isRefreshing: Boolean,
         onRefresh: () -> Unit,
-        FavorisChange:(List<FastFood>)-> Unit
+        FavorisChange:(List<FastFood>)-> Unit,
     ) {
         var lat1 by remember { mutableStateOf<Double?>(null) }
         var lon1 by remember { mutableStateOf<Double?>(null) }
@@ -219,7 +243,7 @@
                                                 Log.d("FastFoodSupprimeFavoris", "Favori introuvable pour ${food.nom}")
                                             }
                                         }
-                                        // 🔄 Mettre à jour fastFoods pour déclencher recomposition
+                                        // Mettre à jour fastFoods pour déclencher recomposition
                                         FavorisChange(storage.findAll())
                                     }
                                 ) {
