@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.Text
 import androidx.core.content.ContextCompat
 import com.example.fastfood.mainpage.RestoMainScreen
 import com.example.fastfood.ui.theme.FastFoodTheme
@@ -20,7 +21,7 @@ class MainActivity : ComponentActivity() {
     private var longitude: Double? = null
 
     // Permission launcher
-    private val permissionLauncher = registerForActivityResult(
+    val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { result ->
         val granted = result[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
@@ -33,10 +34,31 @@ class MainActivity : ComponentActivity() {
             Toast.makeText(this, "Permission refusée", Toast.LENGTH_SHORT).show()
         }
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+
+        // Vérifie si l'une des permissions est déjà accordée
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            fetchUserLocation()
+        } else {
+            // Demande les deux permissions
+            permissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
 
         setContent {
             FastFoodTheme {
@@ -57,6 +79,20 @@ class MainActivity : ComponentActivity() {
             this, Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
+        if(fineGranted||coarseGranted){
+            fetchUserLocation()
+        }
+        else{
+            Toast.makeText(this, "Aucune permission", Toast.LENGTH_SHORT).show()
+            // Demande les deux permissions
+            permissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
+
     }
 
     /** Appelle la fonction utilitaire pour récupérer la localisation **/
@@ -65,11 +101,11 @@ class MainActivity : ComponentActivity() {
             if (lat != null && lon != null) {
                 latitude = lat
                 longitude = lon
-                /*Log.d("GPS", "Ma position : $lat, $lon")
-                Toast.makeText(this, "Position : $lat, $lon", Toast.LENGTH_LONG).show()*/
+                Log.d("GPS", "Ma position : $lat, $lon")
+                //Toast.makeText(this, "Position : $lat, $lon", Toast.LENGTH_LONG).show()
             } else {
-                /*Log.d("GPS", "Impossible d’obtenir la position")
-                Toast.makeText(this, "Impossible d’obtenir la position", Toast.LENGTH_SHORT).show()*/
+                Log.d("GPS", "Impossible d’obtenir la position")
+                Toast.makeText(this, "Impossible d’obtenir la position", Toast.LENGTH_SHORT).show()
             }
         }
     }
