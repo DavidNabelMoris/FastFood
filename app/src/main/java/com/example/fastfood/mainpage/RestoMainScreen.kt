@@ -31,7 +31,7 @@ import androidx.compose.ui.text.TextStyle
 import com.example.fastfood.list.FastFoodScreen
 
 @Composable
-fun RestoMainScreen(updateLocation: () -> Unit) {
+fun RestoMainScreen(onUseMyLocation: () -> Unit) {
     val (query, setQuery) = remember { mutableStateOf("") }
 
     Box(
@@ -72,7 +72,7 @@ fun RestoMainScreen(updateLocation: () -> Unit) {
             }
 
             Button(
-                onClick = { updateLocation() },
+                onClick = onUseMyLocation,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),
