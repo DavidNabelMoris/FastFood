@@ -104,7 +104,8 @@ fun RestoItem(food: FastFood
 
 
 
-                    }
+                    },
+                    modifier=Modifier.padding(end=20.dp)
                 ) {
                     Icon(
                         painter = painterResource(heartIcon),
@@ -117,7 +118,7 @@ fun RestoItem(food: FastFood
 
                 Text(
                     text = "Note : ${food.note} ★",
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).padding(start = 20.dp),
                     color = Color.Magenta,
                     fontSize = 16.sp
                 )
@@ -140,5 +141,31 @@ fun RestoItem(food: FastFood
                 )
             }
         } }
+}
+@Preview(showBackground = true)
+@Composable
+fun RestoItemPreview() {
+    FastFoodTheme {
+        val sampleFood = FastFood(
+            id = 1,
+            nom = "Le Bistrot",
+            address = "123 Rue Principale",
+            note = 4.0f,
+            latitude = 45.595583,
+            longitude = 5.896662,
+            description = "Un bistrot français traditionnel avec une ambiance chaleureuse.",
+            favoris = false,
+            horaires = listOf(
+                HoraireJour("Lundi", "08:00 - 12:00", "14:00 - 22:00"),
+                HoraireJour("Mardi", "08:00 - 12:00", "14:00 - 22:00"),
+                HoraireJour("Mercredi", "08:00 - 12:00", "14:00 - 22:00"),
+                HoraireJour("Jeudi", "08:00 - 12:00", "14:00 - 22:00"),
+                HoraireJour("Vendredi", "08:00 - 12:00", "14:00 - 22:00"),
+                HoraireJour("Samedi", "08:00 - 12:00", "14:00 - 22:00"),
+                HoraireJour("Dimanche", "08:00 - 12:00", "14:00 - 22:00")
+            )
+        )
+        RestoItem(food = sampleFood)
+    }
 }
 
