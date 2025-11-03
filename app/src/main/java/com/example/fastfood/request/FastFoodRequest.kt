@@ -78,6 +78,7 @@ class FastFoodRequest(private val context: Context, onUpdate: (List<FastFood>) -
             val fastfood: FastFood=FastFood(id = 0,
             obj.getString(FastFood.NOM),
             obj.getString(FastFood.ADDRESS),
+                obj.getString(FastFood.TELEPHONE),
             obj.getDouble(FastFood.NOTE).toFloat(),
             obj.getDouble(FastFood.LATITUDE),
             obj.getDouble(FastFood.LONGITUDE),

@@ -110,7 +110,7 @@ fun RestoMainScreen(onUseMyLocation: () -> Unit) {
             Spacer(Modifier.height(16.dp))
 
 
-            FastFoodScreen()
+            FastFoodScreen(searchQuery = query)
         }
 
         FloatingActionButton(

@@ -14,6 +14,7 @@ class FastFoodJSONFileStorage(context: Context) : JSONFileStorage<FastFood>(cont
         return FastFood(id,
             obj.nom,
             obj.address,
+            obj.telephone,
             obj.note,
             obj.latitude,
             obj.longitude,
@@ -27,6 +28,7 @@ class FastFoodJSONFileStorage(context: Context) : JSONFileStorage<FastFood>(cont
         json.put(FastFood.ID, id)
         json.put(FastFood.NOM, obj.nom)
         json.put(FastFood.ADDRESS, obj.address)
+        json.put(FastFood.TELEPHONE, obj.telephone)
         json.put(FastFood.NOTE, obj.note)
         json.put(FastFood.LATITUDE, obj.latitude)
         json.put(FastFood.LONGITUDE, obj.longitude)
@@ -72,6 +74,7 @@ class FastFoodJSONFileStorage(context: Context) : JSONFileStorage<FastFood>(cont
             json.getInt(FastFood.ID),
             json.getString(FastFood.NOM),
             json.getString(FastFood.ADDRESS),
+            json.getString(FastFood.TELEPHONE),
             json.getDouble(FastFood.NOTE).toFloat(),
             json.getDouble(FastFood.LATITUDE),
             json.getDouble(FastFood.LONGITUDE),

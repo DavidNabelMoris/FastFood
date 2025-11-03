@@ -13,6 +13,7 @@ data class FastFood (
     val id: Int,
     val nom: String,
     val address: String,
+    val telephone : String,
     val note: Float,
     val latitude: Double,
     val longitude: Double,
@@ -24,6 +25,7 @@ data class FastFood (
         const val ID = "id"
         const val NOM = "nom"
         const val ADDRESS = "address"
+        const val TELEPHONE = "telephone"
         const val NOTE = "note"
         const val LATITUDE = "latitude"
         const val LONGITUDE = "longitude"
