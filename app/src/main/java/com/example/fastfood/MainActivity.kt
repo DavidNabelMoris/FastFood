@@ -9,7 +9,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import com.example.fastfood.mainpage.RestoMainScreen
 import com.example.fastfood.ui.theme.FastFoodTheme
@@ -61,9 +64,15 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
+            var refreshTrigger by remember { mutableStateOf(false) }
             FastFoodTheme {
                 RestoMainScreen(
-                    onUseMyLocation = { requestLocationPermission()}   // <-- matches screen
+                    onUseMyLocation = {
+                        requestLocationPermission()
+                        refreshTrigger = !refreshTrigger
+                    },// <-- matches screen
+                    refreshTrigger = refreshTrigger
+
                 )
             }
         }

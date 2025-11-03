@@ -31,7 +31,7 @@ import androidx.compose.ui.text.TextStyle
 import com.example.fastfood.list.FastFoodScreen
 
 @Composable
-fun RestoMainScreen(onUseMyLocation: () -> Unit) {
+fun RestoMainScreen(onUseMyLocation: () -> Unit, refreshTrigger: Boolean) {
     val (query, setQuery) = remember { mutableStateOf("") }
 
     Box(
@@ -110,7 +110,7 @@ fun RestoMainScreen(onUseMyLocation: () -> Unit) {
             Spacer(Modifier.height(16.dp))
 
 
-            FastFoodScreen(searchQuery = query)
+            FastFoodScreen(searchQuery = query,refreshTrigger)
         }
 
         FloatingActionButton(
@@ -150,5 +150,5 @@ private fun CategoryChip(label: String) {
 @Preview(showBackground = true)
 @Composable
 fun RestoMainScreenPreview() {
-    FastFoodTheme { RestoMainScreen({}) }
+    FastFoodTheme { RestoMainScreen({},refreshTrigger = false) }
 }

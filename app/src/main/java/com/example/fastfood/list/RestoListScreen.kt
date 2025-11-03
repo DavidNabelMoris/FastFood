@@ -49,7 +49,7 @@
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun FastFoodScreen(searchQuery: String) {
+    fun FastFoodScreen(searchQuery: String,refreshDistances: Boolean) {
         val context = LocalContext.current
         var fastFoods by remember { mutableStateOf(listOf<FastFood>()) }
         var allfastFoods by remember { mutableStateOf(listOf<FastFood>()) }
@@ -72,6 +72,17 @@
             RestoLocation.calcul_position(context) { latitude, longitude ->
                 lat = latitude
                 lon = longitude
+            }
+        }
+
+        // Quand on clique sur le bouton localisation
+        LaunchedEffect(refreshDistances) {
+            Log.d("RECOMPOSE", "Déclenchement du rafraîchissement de la localisation: $refreshDistances")
+
+            RestoLocation.calcul_position(context) { latitude, longitude ->
+                lat = latitude
+                lon = longitude
+                Log.d("GPS_UPDATE", "Nouvelle position dans FastFoodScreen: $lat,$lon")
             }
         }
     // si les liste ils sont pariel on le fusionS
@@ -137,7 +148,9 @@
             } ,
             FavorisChange = { List ->
                 fastFoods = List
-            }
+            },
+            currentLat = lat,
+            currentLon = lon
         )
     }
 
@@ -149,18 +162,11 @@
         fastFoods: List<FastFood>,
         isRefreshing: Boolean,
         onRefresh: () -> Unit,
-        FavorisChange:(List<FastFood>)-> Unit,
+        FavorisChange: (List<FastFood>) -> Unit,
+        currentLat: Double?,
+        currentLon: Double?
     ) {
-        var lat1 by remember { mutableStateOf<Double?>(null) }
-        var lon1 by remember { mutableStateOf<Double?>(null) }
 
-        LaunchedEffect(Unit) {
-            RestoLocation.calcul_position(context) { latitude, longitude ->
-                lat1 = latitude
-                lon1 = longitude
-                Log.d("DIST", "My location = $lat1,$lon1")
-            }
-        }
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -229,8 +235,8 @@
                                     contentScale = ContentScale.Crop
                                 )
                                 val distanceText =
-                                    if (lat1 != null && lon1 != null) {
-                                        val d = calculateDistance(lat1!!, lon1!!, food.latitude, food.longitude)
+                                    if (currentLat != null && currentLon != null) {
+                                        val d = calculateDistance(currentLat, currentLon, food.latitude, food.longitude)
                                         String.format("%.1f km", d)
                                     } else {
                                         "Localisation en cours..."
@@ -308,7 +314,7 @@
                 )
             )
             RestoListScreen(
-                fastFoods = sample, isRefreshing = false, onRefresh = {}, FavorisChange = {}
+                fastFoods = sample, isRefreshing = false, onRefresh = {}, FavorisChange = {}, currentLat = 0.0, currentLon = 0.0
             )
         }}
 
