@@ -74,7 +74,7 @@
                 lon = longitude
             }
         }
-
+    // si les liste ils sont pariel on le fusionS
         fun fusion_liste(api: List<FastFood>, locale:List<FastFood>,context: Context):List<FastFood>{
             val resList = mutableListOf<FastFood>()
             resList.addAll(locale)
