@@ -176,6 +176,23 @@ fun RestoItem(food: FastFood) {
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                // ... Box(
+                //        modifier = Modifier
+                //            .fillMaxWidth()
+                //            .clip(RoundedCornerShape(12.dp))
+                //            .background(FastFoodTheme.colors.cardBackground)        // consistent with your theme
+                //            .padding(12.dp)
+                //    ) {
+                //        Row(verticalAlignment = Alignment.CenterVertically) {
+                //            // small accent icon
+                //            Icon(icon, null, tint = FastFoodTheme.colors.primary, modifier = Modifier.size(20.dp))
+                //            Spacer(Modifier.width(12.dp))
+                //            Column {
+                //                Text(label, color = FastFoodTheme.colors.onPrimaryDisabled, fontSize = 12.sp)
+                //                Text(value, color = FastFoodTheme.colors.textPrimary, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                //            }
+                //        }
+                //    }
                 InfoRow(
                     icon = Icons.Filled.Call,
                     label = "Téléphone",
@@ -188,8 +205,7 @@ fun RestoItem(food: FastFood) {
                 )
             }
 
-            // Description (if any)
-            if (food.description.isNotBlank()) {
+            // description
                 Spacer(Modifier.height(8.dp))
                 Text(
                     text = food.description,
@@ -197,11 +213,10 @@ fun RestoItem(food: FastFood) {
                     fontSize = 15.sp,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
-            }
 
             Spacer(Modifier.height(16.dp))
 
-            // ===== Horaires =====
+            //Horaires
             if (food.horaires.isNotEmpty()) {
                 Box(
                     modifier = Modifier
@@ -237,27 +252,27 @@ fun RestoItem(food: FastFood) {
     }
 }
 
+//au lieu de ecrire la fonction deux fois , utilise pour afficher le tel and adresss
 @Composable
 private fun InfoRow(
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     label: String,
     value: String
 ) {
-    val colors = FastFoodTheme.colors
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .background(colors.cardBackground)        // consistent with your theme
+            .background(FastFoodTheme.colors.cardBackground)        // consistent with your theme
             .padding(12.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            // small accent icon
-            Icon(icon, null, tint = colors.primary, modifier = Modifier.size(20.dp))
+            // icons
+            Icon(icon, null, tint = FastFoodTheme.colors.primary, modifier = Modifier.size(20.dp))
             Spacer(Modifier.width(12.dp))
             Column {
-                Text(label, color = colors.onPrimaryDisabled, fontSize = 12.sp)
-                Text(value, color = colors.textPrimary, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                Text(label, color = FastFoodTheme.colors.onPrimaryDisabled, fontSize = 12.sp)
+                Text(value, color = FastFoodTheme.colors.textPrimary, fontSize = 16.sp, fontWeight = FontWeight.Medium)
             }
         }
     }

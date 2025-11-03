@@ -77,9 +77,7 @@
 
         fun fusion_liste(api: List<FastFood>, locale:List<FastFood>,context: Context):List<FastFood>{
             val resList = mutableListOf<FastFood>()
-
             resList.addAll(locale)
-
             for (fastfood in api) {
                 val existeDeja = estDans(context,fastfood.nom,fastfood.address)
                 if (!existeDeja) {
@@ -112,11 +110,22 @@
                 f.nom.contains(q, ignoreCase = true)
             }
         }
+        val displayList = remember(filtered, lat, lon) {
+            val favKey: (FastFood) -> Int = { f -> if (f.favoris) 0 else 1 }
+            if (lat != null && lon != null) {
+                filtered.sortedWith(
+                    compareBy<FastFood> { favKey(it) }
+                        .thenBy { f -> RestoLocation.calculateDistance(lat!!, lon!!, f.latitude, f.longitude) }
+                )
+            } else {
+                filtered.sortedBy { favKey(it) } // juste favoris d’abord
+            }
+        }
 
         // Affichage de la liste
         RestoListScreen(
             context = context,
-            fastFoods = filtered,
+            fastFoods = displayList,
             isRefreshing = isRefreshing,
             onRefresh = {
                 isRefreshing = true
@@ -206,6 +215,7 @@
 
 
                             ) {
+                                //pour replaace le + & %20 qui ca dire une espace
                                 val imgName = java.net.URLEncoder.encode(food.nom, "UTF-8").replace("+", "%20")
                                 val imageUrl = "http://51.68.91.213/gr-3-5/img/$imgName.png"
 
@@ -251,10 +261,10 @@
 
                                             if(id_supprime!=null){
                                                 storage.delete(id_supprime)
-                                                Log.d("FastFoodSupprimeFavoris", "Favori supprimer ${food.nom}")
+                                                //Log.d("FastFoodSupprimeFavoris", "Favori supprimer ${food.nom}")
                                             }
                                             else{
-                                                Log.d("FastFoodSupprimeFavoris", "Favori introuvable pour ${food.nom}")
+                                                //Log.d("FastFoodSupprimeFavoris", "Favori introuvable pour ${food.nom}")
                                             }
                                         }
                                         // Mettre à jour fastFoods pour déclencher recomposition
@@ -263,7 +273,9 @@
                                 ) {
                                     Icon(
                                         painter = painterResource(heartIcon),
-                                        contentDescription = if (isFavoris) "Retirer des favoris" else "Ajouter aux favoris",
+                                        contentDescription =
+                                            if (isFavoris){ "Retirer des favoris"}
+                                            else {"Ajouter aux favoris"},
                                         tint = Color.Unspecified,
                                         modifier = Modifier.size(24.dp)
                                     )
